@@ -1,47 +1,59 @@
-using UnityEngine;
+﻿using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class PlayerHealth : MonoBehaviour
 {
-    [Header("Health")]
+    [Header("Player Settings")]
     public int health = 100;
 
-    [Header("UI")]
-    public TextMeshProUGUI healthText; // ???? ?? ?????? ???
-    public GameObject gameOverUI;       // ???? Panel ?? Text ????? ??? GAME OVER (???? Disabled ????????)
+    [Header("UI References")]
+    public TextMeshProUGUI healthText;   
+    public GameObject gameOverUI;       
+    public GameObject restartButton; 
 
     void Start()
     {
-        Time.timeScale = 1f;                 // ???? ?? ????? ??? ?????
-        if (gameOverUI) gameOverUI.SetActive(false);
-        if (healthText) healthText.text = "Health: " + health;
+        Time.timeScale = 1f;
+
+        
+        if (gameOverUI != null) gameOverUI.SetActive(false);
+        if (restartButton != null) restartButton.SetActive(false);
+
+        if (healthText != null)
+            healthText.text = "Health: " + health;
     }
 
     void OnTriggerEnter2D(Collider2D col)
     {
         if (col.CompareTag("Enemy"))
-        {
             TakeDamage(10);
-        }
     }
 
-    public void TakeDamage(int amount)
+    void TakeDamage(int amount)
     {
         health -= amount;
         if (health < 0) health = 0;
 
-        if (healthText) healthText.text = "Health: " + health;
+        if (healthText != null)
+            healthText.text = "Health: " + health;
 
         if (health <= 0)
-        {
-            Die();
-        }
+            GameOver();
     }
 
-    void Die()
+    void GameOver()
     {
-        if (healthText) healthText.gameObject.SetActive(false);
-        if (gameOverUI) gameOverUI.SetActive(true);
-        Time.timeScale = 0f; // ????? ??????
+        if (healthText != null) healthText.gameObject.SetActive(false);
+        if (gameOverUI != null) gameOverUI.SetActive(true);
+        if (restartButton != null) restartButton.SetActive(true);
+
+        Time.timeScale = 0f; // عشان توقف اللعبه
+    }
+
+    public void RestartGame()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }
