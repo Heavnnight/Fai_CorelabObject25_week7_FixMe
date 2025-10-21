@@ -19,10 +19,11 @@ public class HurtSound : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
-    public void DisplayARandomHurtText() {
+    public void DisplayARandomHurtText()
+    {
         string randomHurtSound = hurtSounds[Random.Range(0, hurtSounds.Length)];
         text.text = randomHurtSound;
     }
